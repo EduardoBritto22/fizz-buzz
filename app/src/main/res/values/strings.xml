@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Fizz-Buzz</string>
+    <string name="boutton_valider">Validate</string>
 </resources>
