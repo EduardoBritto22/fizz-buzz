@@ -7,3 +7,4 @@
 
 ## Other useful features
 - View Binding: To facilitate the coding of Fragments and for null safety;
+- Hilt: To inject dependencies ;

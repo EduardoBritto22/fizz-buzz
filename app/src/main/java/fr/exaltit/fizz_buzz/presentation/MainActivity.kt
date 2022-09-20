@@ -3,10 +3,11 @@ package fr.exaltit.fizz_buzz.presentation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
+import dagger.hilt.android.AndroidEntryPoint
 import fr.exaltit.fizz_buzz.R
 import fr.exaltit.fizz_buzz.presentation.fragments.FizzBuzzFormFragment
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
