@@ -5,13 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import dagger.hilt.android.AndroidEntryPoint
 import fr.exaltit.fizz_buzz.databinding.FragmentFizzbuzzViewBinding
+import fr.exaltit.fizz_buzz.presentation.FizzBuzzViewModel
 
 /**
  * The [Fragment] to show the text of the fizz buzz app.
  */
+@AndroidEntryPoint
 class FizzBuzzViewFragment : Fragment() {
-
+	
+	private val viewModel by activityViewModels<FizzBuzzViewModel>()
 	
 	private var _binding: FragmentFizzbuzzViewBinding? = null
 	// This property is only valid between onCreateView and

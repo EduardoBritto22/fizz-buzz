@@ -5,14 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import dagger.hilt.android.AndroidEntryPoint
 import fr.exaltit.fizz_buzz.databinding.FragmentFizzbuzzFormBinding
+import fr.exaltit.fizz_buzz.presentation.FizzBuzzViewModel
 
 
 /**
  * The [Fragment] with teh form to get the parameters.
  */
+@AndroidEntryPoint
 class FizzBuzzFormFragment : Fragment() {
-
+	
+	private val viewModel by activityViewModels<FizzBuzzViewModel>()
 	
 	private var _binding: FragmentFizzbuzzFormBinding? = null
 	// This property is only valid between onCreateView and
@@ -32,11 +37,14 @@ class FizzBuzzFormFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		binding.buttonValidate.setOnClickListener {
-			binding.textInputFirstWord
-			binding.textInputSecondWord
-			binding.textInputFirstMultiple
-			binding.textInputSecondMultiple
-			binding.textInputLimit
+			
+			viewModel.firstMultiple = Integer.getInteger(binding.textInputFirstMultiple.text.toString()) as Int
+			viewModel.secondMultiple = Integer.getInteger(binding.textInputSecondMultiple.text.toString()) as Int
+			viewModel.limit = Integer.getInteger(binding.textInputLimit.text.toString()) as Int
+			
+			viewModel.firstWord =  binding.textInputFirstWord.text.toString()
+			viewModel.secondWord =  binding.textInputSecondWord.text.toString()
+			viewModel.firstWord =  binding.textInputFirstWord.text.toString()
 		}
 	}
 	
