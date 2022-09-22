@@ -2,4 +2,11 @@
 <resources>
 	<string name="app_name">Fizz-Buzz</string>
 	<string name="boutton_valider">Validar</string>
+	<string name="first_multiple_title">Primeiro multiplo</string>
+	<string name="second_multiple_title">Segundo multiple</string>
+	<string name="limit_title">Limite</string>
+	<string name="second_word_title">Segunda palavra</string>
+	<string name="first_word_title">Primeira palavra</string>
+	<string name="message_error_fill_multiple">O multiplo deve ser maior do que zero</string>
+	<string name="message_error_fill_limit">O limite deve ser maior do que zero</string>
 </resources>

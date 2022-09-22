@@ -1,10 +1,12 @@
 package fr.exaltit.fizz_buzz.utils
 
 import fr.exaltit.fizz_buzz.domain.model.FizzBuzzData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class FizzBuzzCalculator(private val data: FizzBuzzData) {
 	
-	fun getFizzBuzzText():String{
+	suspend fun getFizzBuzzText():String = withContext(Dispatchers.IO){
 		var fizzBuzzString = ""
 		data.let {
 			for(i in 1 .. it.limit){
@@ -21,7 +23,7 @@ class FizzBuzzCalculator(private val data: FizzBuzzData) {
 			fizzBuzzString = fizzBuzzString.removeSuffix(", ") // remove the last comma
 		}
 		
-		return fizzBuzzString
+		return@withContext fizzBuzzString
 	}
 }
 	

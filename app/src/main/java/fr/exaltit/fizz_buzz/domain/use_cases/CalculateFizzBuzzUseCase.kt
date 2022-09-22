@@ -5,7 +5,8 @@ import fr.exaltit.fizz_buzz.utils.FizzBuzzCalculator
 import javax.inject.Inject
 
 class CalculateFizzBuzzUseCase @Inject constructor(): ICalculateFizzBuzzUseCase {
-	override fun invoke(data: FizzBuzzData): Result<String> {
-		return Result.success(FizzBuzzCalculator(data).getFizzBuzzText())
+	override suspend fun invoke(data: FizzBuzzData): Result<String> {
+		val fizzBuzzText = FizzBuzzCalculator(data).getFizzBuzzText()
+		return Result.success(fizzBuzzText)
 	}
 }

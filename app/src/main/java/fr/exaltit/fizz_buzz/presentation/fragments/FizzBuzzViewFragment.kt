@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import fr.exaltit.fizz_buzz.databinding.FragmentFizzbuzzViewBinding
 import fr.exaltit.fizz_buzz.presentation.FizzBuzzViewModel
@@ -35,14 +36,18 @@ class FizzBuzzViewFragment : Fragment() {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		//binding.textViewShowText.text = "Charging ...."
-	}
-	
-	
-	override fun onResume() {
-		super.onResume()
-		viewModel.fizzBuzzString.observe(viewLifecycleOwner) {
-			binding.textViewShowText.text = it
+		binding.loadingFizzbuzzText.visibility = View.VISIBLE
+		binding.textViewShowText.visibility = View.GONE
+		
+		lifecycleScope.launchWhenResumed {
+			viewModel.fizzBuzzString.observe(viewLifecycleOwner) {
+				if (!it.isNullOrEmpty()) {
+					binding.textViewShowText.text = it
+					binding.textViewShowText.visibility = View.VISIBLE
+					binding.loadingFizzbuzzText.visibility = View.GONE
+				}
+			}
+			viewModel.getFizzBuzzText()
 		}
 	}
 	

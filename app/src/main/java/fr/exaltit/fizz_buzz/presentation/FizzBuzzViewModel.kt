@@ -2,11 +2,9 @@ package fr.exaltit.fizz_buzz.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.exaltit.fizz_buzz.domain.model.FizzBuzzData
 import fr.exaltit.fizz_buzz.domain.use_cases.CalculateFizzBuzzUseCase
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,8 +13,13 @@ class FizzBuzzViewModel @Inject constructor(
 ) : ViewModel() {
 	
 	val fizzBuzzString = MutableLiveData<String>()
+	val showNextFragment = MutableLiveData<Boolean>()
 	
 	private var data: FizzBuzzData? = null
+	
+	init {
+		showNextFragment.postValue(false)
+	}
 	
 	fun setFizzBuzzData(firstWord: String, secondWord: String, firstMultiple: Int, secondMultiple: Int, limit: Int) {
 		data = FizzBuzzData(
@@ -26,14 +29,15 @@ class FizzBuzzViewModel @Inject constructor(
 			firstWord = firstWord,
 			secondWord = secondWord
 		)
-		getFizzBuzzText()
 	}
 	
+	fun showNextFragment( showNext: Boolean){
+		showNextFragment.postValue(showNext)
+		fizzBuzzString.postValue("")
+	}
 	
-	private fun getFizzBuzzText() {
-		viewModelScope.launch {
+	suspend fun getFizzBuzzText() {
 			data?.let {
-				setLoadState()
 				calculateFizzBuzz(it)
 					.onSuccess { result ->
 						setContentState(result)
@@ -42,8 +46,6 @@ class FizzBuzzViewModel @Inject constructor(
 						setErrorState()
 					}
 			}
-		}
-		
 	}
 	
 	private fun setContentState(transactionsResult: String) {
@@ -52,12 +54,10 @@ class FizzBuzzViewModel @Inject constructor(
 	
 	
 	private fun setErrorState() {
-		fizzBuzzString.postValue("Error!")
-
+		setContentState("Error while charging the text! Please try again.")
 	}
 	
-	private fun setLoadState() {
-		fizzBuzzString.postValue("Charging.....")
-		
+	fun getFizzBuzzData(): FizzBuzzData? {
+		return data
 	}
 }

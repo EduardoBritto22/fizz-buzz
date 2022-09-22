@@ -39,7 +39,7 @@ class FizzBuzzFormFragment : Fragment() {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		
+		viewModel.showNextFragment(false)
 		setUi()
 	}
 	
@@ -57,14 +57,15 @@ class FizzBuzzFormFragment : Fragment() {
 			override fun afterTextChanged(s: Editable?) = checkValidation()
 		}
 		
-		//Add listeners to verify if any field is empty
-		binding.textInputFirstWord.addTextChangedListener(textWatcher)
-		binding.textInputSecondWord.addTextChangedListener(textWatcher)
-		binding.textInputFirstMultiple.addTextChangedListener(textWatcher)
-		binding.textInputSecondMultiple.addTextChangedListener(textWatcher)
-		binding.textInputLimit.addTextChangedListener(textWatcher)
+		setTextWatchers(textWatcher)
 		
-		binding.buttonValidate.isEnabled = false
+		preFillFizzBuzzForm()
+		
+		setUpButton()
+	}
+	
+	private fun setUpButton() {
+		checkValidation()
 		binding.buttonValidate.setOnClickListener {
 			
 			val firstMultiple = (binding.textInputFirstMultiple.text.toString().toInt())
@@ -75,18 +76,17 @@ class FizzBuzzFormFragment : Fragment() {
 			val secondWord = binding.textInputSecondWord.text.toString()
 			
 			viewModel.setFizzBuzzData(firstWord, secondWord, firstMultiple, secondMultiple, limit)
-			
-			goToNextScreen()
+			viewModel.showNextFragment(true)
 		}
 	}
 	
-	private fun goToNextScreen() {
-		val fragment = FizzBuzzViewFragment()
-		parentFragmentManager
-			.beginTransaction()
-			.addToBackStack("FizzBuzzView")
-			.replace(R.id.fragment_main, fragment)
-			.commit()
+	private fun setTextWatchers(textWatcher: TextWatcher) {
+		//Add listeners to verify if any field is empty
+		binding.textInputFirstWord.addTextChangedListener(textWatcher)
+		binding.textInputSecondWord.addTextChangedListener(textWatcher)
+		binding.textInputFirstMultiple.addTextChangedListener(textWatcher)
+		binding.textInputSecondMultiple.addTextChangedListener(textWatcher)
+		binding.textInputLimit.addTextChangedListener(textWatcher)
 	}
 	
 	private fun checkValidation() {
@@ -106,21 +106,34 @@ class FizzBuzzFormFragment : Fragment() {
 		
 	}
 	
+	private fun preFillFizzBuzzForm() {
+		val buzzData = viewModel.getFizzBuzzData()
+		
+		buzzData?.run {
+			binding.textInputFirstWord.setText(firstWord)
+			binding.textInputSecondWord.setText(secondWord)
+			binding.textInputFirstMultiple.setText(firstMultiple.toString())
+			binding.textInputSecondMultiple.setText(secondMultiple.toString())
+			binding.textInputLimit.setText(limit.toString())
+		}
+	}
+	
+	
 	private fun checkNumberEquals0() {
 		if (binding.textInputFirstMultiple.text.toString() == "0") {
-			binding.textInputFirstMultiple.error = "The multiple must be different from zero"
+			binding.textInputFirstMultiple.error = getString(R.string.message_error_fill_multiple)
 		} else {
 			binding.textInputFirstMultiple.error = null
 		}
 		
 		if (binding.textInputSecondMultiple.text.toString() ==  "0") {
-			binding.textInputSecondMultiple.error = "The multiple must be different from zero"
+			binding.textInputSecondMultiple.error = getString(R.string.message_error_fill_multiple)
 		} else {
 			binding.textInputSecondMultiple.error = null
 		}
 		
 		if (binding.textInputLimit.text.toString() == "0") {
-			binding.textInputLimit.error = "The limit must be bigger than zero"
+			binding.textInputLimit.error = getString(R.string.message_error_fill_limit)
 		} else {
 			binding.textInputLimit.error = null
 		}
