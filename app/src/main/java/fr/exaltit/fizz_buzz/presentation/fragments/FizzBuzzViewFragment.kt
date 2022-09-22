@@ -35,9 +35,16 @@ class FizzBuzzViewFragment : Fragment() {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		binding.textViewShowText
+		//binding.textViewShowText.text = "Charging ...."
 	}
 	
+	
+	override fun onResume() {
+		super.onResume()
+		viewModel.fizzBuzzString.observe(viewLifecycleOwner) {
+			binding.textViewShowText.text = it
+		}
+	}
 	
 	override fun onDestroy() {
 		super.onDestroy()

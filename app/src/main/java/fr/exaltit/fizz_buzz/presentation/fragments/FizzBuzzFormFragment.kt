@@ -1,12 +1,15 @@
 package fr.exaltit.fizz_buzz.presentation.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
+import fr.exaltit.fizz_buzz.R
 import fr.exaltit.fizz_buzz.databinding.FragmentFizzbuzzFormBinding
 import fr.exaltit.fizz_buzz.presentation.FizzBuzzViewModel
 
@@ -36,22 +39,90 @@ class FizzBuzzFormFragment : Fragment() {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		binding.buttonValidate.setOnClickListener {
-			
-			viewModel.firstMultiple = Integer.getInteger(binding.textInputFirstMultiple.text.toString()) as Int
-			viewModel.secondMultiple = Integer.getInteger(binding.textInputSecondMultiple.text.toString()) as Int
-			viewModel.limit = Integer.getInteger(binding.textInputLimit.text.toString()) as Int
-			
-			viewModel.firstWord =  binding.textInputFirstWord.text.toString()
-			viewModel.secondWord =  binding.textInputSecondWord.text.toString()
-			viewModel.firstWord =  binding.textInputFirstWord.text.toString()
-		}
+		
+		setUi()
 	}
-	
 	
 	override fun onDestroy() {
 		super.onDestroy()
 		_binding = null
+	}
+	
+	private fun setUi() {
+		val textWatcher = object : TextWatcher {
+			override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+			
+			override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+			
+			override fun afterTextChanged(s: Editable?) = checkValidation()
+		}
 		
+		//Add listeners to verify if any field is empty
+		binding.textInputFirstWord.addTextChangedListener(textWatcher)
+		binding.textInputSecondWord.addTextChangedListener(textWatcher)
+		binding.textInputFirstMultiple.addTextChangedListener(textWatcher)
+		binding.textInputSecondMultiple.addTextChangedListener(textWatcher)
+		binding.textInputLimit.addTextChangedListener(textWatcher)
+		
+		binding.buttonValidate.isEnabled = false
+		binding.buttonValidate.setOnClickListener {
+			
+			val firstMultiple = (binding.textInputFirstMultiple.text.toString().toInt())
+			val secondMultiple = binding.textInputSecondMultiple.text.toString().toInt()
+			val limit = binding.textInputLimit.text.toString().toInt()
+			
+			val firstWord = binding.textInputFirstWord.text.toString()
+			val secondWord = binding.textInputSecondWord.text.toString()
+			
+			viewModel.setFizzBuzzData(firstWord, secondWord, firstMultiple, secondMultiple, limit)
+			
+			goToNextScreen()
+		}
+	}
+	
+	private fun goToNextScreen() {
+		val fragment = FizzBuzzViewFragment()
+		parentFragmentManager
+			.beginTransaction()
+			.addToBackStack("FizzBuzzView")
+			.replace(R.id.fragment_main, fragment)
+			.commit()
+	}
+	
+	private fun checkValidation() {
+		binding.buttonValidate.isEnabled = !(binding.textInputFirstMultiple.text.isNullOrEmpty()
+				|| binding.textInputSecondMultiple.text.isNullOrEmpty()
+				|| binding.textInputLimit.text.isNullOrEmpty()
+				|| binding.textInputFirstWord.text.isNullOrEmpty()
+				|| binding.textInputSecondWord.text.isNullOrEmpty())
+				
+				&& (binding.textInputFirstMultiple.error.isNullOrEmpty()
+					&& binding.textInputSecondMultiple.error.isNullOrEmpty()
+					&& binding.textInputLimit.error.isNullOrEmpty()
+					&& binding.textInputFirstWord.error.isNullOrEmpty()
+					&& binding.textInputSecondWord.error.isNullOrEmpty())
+		
+		checkNumberEquals0()
+		
+	}
+	
+	private fun checkNumberEquals0() {
+		if (binding.textInputFirstMultiple.text.toString() == "0") {
+			binding.textInputFirstMultiple.error = "The multiple must be different from zero"
+		} else {
+			binding.textInputFirstMultiple.error = null
+		}
+		
+		if (binding.textInputSecondMultiple.text.toString() ==  "0") {
+			binding.textInputSecondMultiple.error = "The multiple must be different from zero"
+		} else {
+			binding.textInputSecondMultiple.error = null
+		}
+		
+		if (binding.textInputLimit.text.toString() == "0") {
+			binding.textInputLimit.error = "The limit must be bigger than zero"
+		} else {
+			binding.textInputLimit.error = null
+		}
 	}
 }
