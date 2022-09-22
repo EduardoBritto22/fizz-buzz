@@ -4,6 +4,9 @@ import fr.exaltit.fizz_buzz.domain.model.FizzBuzzData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+/**
+ * Class to calculate sequence replacing the multiples by the words.
+ */
 class FizzBuzzCalculator(private val data: FizzBuzzData) {
 	
 	suspend fun getFizzBuzzText():String = withContext(Dispatchers.IO){
