@@ -14,17 +14,33 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-        //github_token "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"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     viewBinding {
         enabled = true
     }
+    signingConfigs {
+        release {
+            storeFile file("keystore.jks")
+            storePassword "exaltit"
+            keyAlias "key_release"
+            keyPassword "exaltit"
+        }
+        debug {
+            storeFile file("debug.keystore")
+        }
+    }
 
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
