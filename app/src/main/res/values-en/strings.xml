@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Fizz-Buzz</string>
-    <string name="boutton_valider">Validate</string>
+	<string name="app_name">Fizz-Buzz</string>
+	<string name="boutton_valider">Validate</string>
 	<string name="first_multiple_title">First multiple</string>
 	<string name="second_multiple_title">Second multiple</string>
 	<string name="limit_title">Limit</string>
