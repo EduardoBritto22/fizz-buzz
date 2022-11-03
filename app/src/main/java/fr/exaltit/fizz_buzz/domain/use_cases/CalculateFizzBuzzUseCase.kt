@@ -1,7 +1,7 @@
 package fr.exaltit.fizz_buzz.domain.use_cases
 
 import fr.exaltit.fizz_buzz.domain.model.FizzBuzzData
-import fr.exaltit.fizz_buzz.utils.FizzBuzzCalculator
+import fr.exaltit.fizz_buzz.domain.utils.FizzBuzzCalculator
 import javax.inject.Inject
 
 /***

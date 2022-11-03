@@ -68,9 +68,9 @@ class FizzBuzzFormFragment : Fragment() {
 		checkValidation()
 		binding.buttonValidate.setOnClickListener {
 			
-			val firstMultiple = (binding.textInputFirstMultiple.text.toString().toInt())
-			val secondMultiple = binding.textInputSecondMultiple.text.toString().toInt()
-			val limit = binding.textInputLimit.text.toString().toInt()
+			val firstMultiple = (binding.textInputFirstMultiple.text.toString().toLong())
+			val secondMultiple = binding.textInputSecondMultiple.text.toString().toLong()
+			val limit = binding.textInputLimit.text.toString().toLong()
 			
 			val firstWord = binding.textInputFirstWord.text.toString()
 			val secondWord = binding.textInputSecondWord.text.toString()
