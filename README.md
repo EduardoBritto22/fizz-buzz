@@ -1,4 +1,4 @@
-# Fizz-Buzz App
+![Cópia de Template - Thumbnails GitHub](https://user-images.githubusercontent.com/31722494/200116975-d9d16204-fbba-457c-a969-c2279265beb1.png)
 
 ## Clean architecture with 3 layers
 - Data (for database, API and preferences code): Not implemented
