@@ -21,7 +21,7 @@ class FizzBuzzViewModel @Inject constructor(
 		showNextFragment.postValue(false)
 	}
 	
-	fun setFizzBuzzData(firstWord: String, secondWord: String, firstMultiple: Int, secondMultiple: Int, limit: Int) {
+	fun setFizzBuzzData(firstWord: String, secondWord: String, firstMultiple: Long, secondMultiple: Long, limit: Long) {
 		data = FizzBuzzData(
 			firstMultiple = firstMultiple,
 			secondMultiple = secondMultiple,
