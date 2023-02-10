@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import fr.exaltit.fizz_buzz.databinding.FragmentFizzbuzzViewBinding
 import fr.exaltit.fizz_buzz.presentation.FizzBuzzViewModel
+import fr.exaltit.fizz_buzz.presentation.adapters.FizzBuzzAdapter
+
 
 /**
  * The [Fragment] to show the text of the fizz buzz app.
@@ -23,31 +26,34 @@ class FizzBuzzViewFragment : Fragment() {
 	// This property is only valid between onCreateView and
 	// onDestroyView.
 	private val binding get() = _binding!!
-	
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
 		// Inflate the layout for this fragment
 		_binding = FragmentFizzbuzzViewBinding.inflate(inflater, container, false)
-		val view = binding.root
-		return view
+		return binding.root
 	}
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		
+		val layoutManager = LinearLayoutManager(requireContext())
+		binding.fizzbuzzRecyclerview.layoutManager = layoutManager
 		binding.loadingFizzbuzzText.visibility = View.VISIBLE
-		binding.textViewShowText.visibility = View.GONE
+		binding.fizzbuzzRecyclerview.visibility = View.GONE
 		
 		lifecycleScope.launchWhenResumed {
-			viewModel.fizzBuzzString.observe(viewLifecycleOwner) {
-				if (!it.isNullOrEmpty()) {
-					binding.textViewShowText.text = it
-					binding.textViewShowText.visibility = View.VISIBLE
+			
+			viewModel.fizzBuzzStringList.observe(viewLifecycleOwner){loaded ->
+				
+				if(!loaded.isNullOrEmpty()){
+					binding.fizzbuzzRecyclerview.adapter = FizzBuzzAdapter(loaded)
+					binding.fizzbuzzRecyclerview.visibility = View.VISIBLE
 					binding.loadingFizzbuzzText.visibility = View.GONE
 				}
+
 			}
-			viewModel.getFizzBuzzText()
 		}
 	}
 	

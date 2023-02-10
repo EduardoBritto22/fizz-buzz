@@ -3,9 +3,9 @@ package fr.exaltit.fizz_buzz.utils
 import fr.exaltit.fizz_buzz.domain.model.FizzBuzzData
 import fr.exaltit.fizz_buzz.domain.utils.FizzBuzzCalculator
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class FizzBuzzCalculatorTest {
 	
@@ -23,16 +23,16 @@ class FizzBuzzCalculatorTest {
 		)
 		
 		val fizzbuzzText = FizzBuzzCalculator(data).getFizzBuzzText()
-		assertEquals(
+		Assertions.assertEquals(
 			"1, 2, fizz, 4, buzz, fizz, 7, 8, fizz, buzz, 11, fizz, 13, 14, fizzbuzz, 16, 17, fizz, 19, buzz",
-			fizzbuzzText
+			fizzbuzzText.joinToString("")
 		)
 	}
 	
 	/**
 	 * Test if there is an exception when the first multiple is zero
 	 */
-	@Test(expected = ArithmeticException::class)
+	@Test
 	fun getException_When_FirstMultipleIsZero(): Unit = runBlocking {
 		val data = FizzBuzzData(
 			firstMultiple = 0,
@@ -41,14 +41,13 @@ class FizzBuzzCalculatorTest {
 			firstWord = "fizz",
 			secondWord = "buzz"
 		)
-		
-		FizzBuzzCalculator(data).getFizzBuzzText()
+		assertThrows<ArithmeticException> { FizzBuzzCalculator(data).getFizzBuzzText() }
 	}
 	
 	/**
 	 * Test if there is an exception when the second multiple is zero
 	 */
-	@Test(expected = ArithmeticException::class)
+	@Test()//(expected = ArithmeticException::class)
 	fun getException_When_SecondMultipleIsZero(): Unit = runBlocking {
 		val data = FizzBuzzData(
 			firstMultiple = 3,
@@ -57,8 +56,7 @@ class FizzBuzzCalculatorTest {
 			firstWord = "fizz",
 			secondWord = "buzz"
 		)
-		
-		FizzBuzzCalculator(data).getFizzBuzzText()
+		assertThrows<ArithmeticException> { FizzBuzzCalculator(data).getFizzBuzzText() }
 	}
 	
 	/**
@@ -75,6 +73,6 @@ class FizzBuzzCalculatorTest {
 		)
 		
 		val fizzBuzz = FizzBuzzCalculator(data).getFizzBuzzText()
-		assertTrue(fizzBuzz.isEmpty())
+		Assertions.assertTrue(fizzBuzz.isEmpty())
 	}
 }

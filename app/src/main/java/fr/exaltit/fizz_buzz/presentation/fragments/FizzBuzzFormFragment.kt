@@ -33,13 +33,11 @@ class FizzBuzzFormFragment : Fragment() {
 	): View {
 		// Inflate the layout for this fragment
 		_binding = FragmentFizzbuzzFormBinding.inflate(inflater, container, false)
-		val view = binding.root
-		return view
+		return binding.root
 	}
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		viewModel.showNextFragment(false)
 		setUi()
 	}
 	
@@ -50,9 +48,13 @@ class FizzBuzzFormFragment : Fragment() {
 	
 	private fun setUi() {
 		val textWatcher = object : TextWatcher {
-			override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+			override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+				//We need just after the modification
+			}
 			
-			override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+			override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+				//We need just after the modification
+			}
 			
 			override fun afterTextChanged(s: Editable?) = checkValidation()
 		}
@@ -76,7 +78,6 @@ class FizzBuzzFormFragment : Fragment() {
 			val secondWord = binding.textInputSecondWord.text.toString()
 			
 			viewModel.setFizzBuzzData(firstWord, secondWord, firstMultiple, secondMultiple, limit)
-			viewModel.showNextFragment(true)
 		}
 	}
 	
@@ -90,6 +91,7 @@ class FizzBuzzFormFragment : Fragment() {
 	}
 	
 	private fun checkValidation() {
+		checkNumberEquals0()
 		binding.buttonValidate.isEnabled = !(binding.textInputFirstMultiple.text.isNullOrEmpty()
 				|| binding.textInputSecondMultiple.text.isNullOrEmpty()
 				|| binding.textInputLimit.text.isNullOrEmpty()
@@ -97,12 +99,12 @@ class FizzBuzzFormFragment : Fragment() {
 				|| binding.textInputSecondWord.text.isNullOrEmpty())
 				
 				&& (binding.textInputFirstMultiple.error.isNullOrEmpty()
-					&& binding.textInputSecondMultiple.error.isNullOrEmpty()
-					&& binding.textInputLimit.error.isNullOrEmpty()
-					&& binding.textInputFirstWord.error.isNullOrEmpty()
-					&& binding.textInputSecondWord.error.isNullOrEmpty())
+				&& binding.textInputSecondMultiple.error.isNullOrEmpty()
+				&& binding.textInputLimit.error.isNullOrEmpty()
+				&& binding.textInputFirstWord.error.isNullOrEmpty()
+				&& binding.textInputSecondWord.error.isNullOrEmpty())
 		
-		checkNumberEquals0()
+
 		
 	}
 	
@@ -126,7 +128,7 @@ class FizzBuzzFormFragment : Fragment() {
 			binding.textInputFirstMultiple.error = null
 		}
 		
-		if (binding.textInputSecondMultiple.text.toString() ==  "0") {
+		if (binding.textInputSecondMultiple.text.toString() == "0") {
 			binding.textInputSecondMultiple.error = getString(R.string.message_error_fill_multiple)
 		} else {
 			binding.textInputSecondMultiple.error = null
@@ -134,8 +136,18 @@ class FizzBuzzFormFragment : Fragment() {
 		
 		if (binding.textInputLimit.text.toString() == "0") {
 			binding.textInputLimit.error = getString(R.string.message_error_fill_limit)
+		} else if (verifyLimitMax()) {
+			binding.textInputLimit.error = getString(R.string.message_error_fill_limit_too_big)
 		} else {
 			binding.textInputLimit.error = null
+		}
+	}
+	
+	private fun verifyLimitMax(): Boolean{
+		return try {
+			binding.textInputLimit.text?.isNotEmpty() == true && binding.textInputLimit.text.toString().toLong() >= Long.MAX_VALUE
+		}catch (e: Exception){
+			true
 		}
 	}
 }

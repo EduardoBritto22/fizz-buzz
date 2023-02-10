@@ -9,4 +9,5 @@
 	<string name="first_word_title">Primeira palavra</string>
 	<string name="message_error_fill_multiple">O multiplo deve ser maior do que zero</string>
 	<string name="message_error_fill_limit">O limite deve ser maior do que zero</string>
+	<string name="message_error_fill_limit_too_big">O limite é muito alto</string>
 </resources>
