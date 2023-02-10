@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         
-        viewModel.showNextFragment.observe(this,observer)
+        viewModel.isLoading.observe(this,observer)
     }
     
     private fun showFragment() {

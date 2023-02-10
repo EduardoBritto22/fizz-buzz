@@ -3,19 +3,14 @@
 												   android:layout_width="match_parent"
 												   android:layout_height="match_parent"
 												   xmlns:tools="http://schemas.android.com/tools">
-	
-	<androidx.core.widget.NestedScrollView
+	<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/fizzbuzz_recyclerview"
+			style="@style/ShowTextView"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent">
-		
-		<TextView
-				tools:text="TextView"
-				style="@style/ShowTextView"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:id="@+id/textView_show_text"/>
-	
-	</androidx.core.widget.NestedScrollView>
+			android:layout_height="wrap_content"
+			tools:listitem="@layout/fizzbuzz_item_row">
+	</androidx.recyclerview.widget.RecyclerView>
+
 	
 	<ProgressBar
 			android:id="@+id/loading_fizzbuzz_text"

@@ -1,10 +1,15 @@
 package fr.exaltit.fizz_buzz.presentation
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.exaltit.fizz_buzz.domain.model.FizzBuzzData
 import fr.exaltit.fizz_buzz.domain.use_cases.CalculateFizzBuzzUseCase
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 @HiltViewModel
@@ -12,13 +17,18 @@ class FizzBuzzViewModel @Inject constructor(
 	private val calculateFizzBuzz: CalculateFizzBuzzUseCase
 ) : ViewModel() {
 	
-	val fizzBuzzString = MutableLiveData<String>()
-	val showNextFragment = MutableLiveData<Boolean>()
+	private val fizzBuzzDataInput = MutableLiveData<FizzBuzzData>()
+	val fizzBuzzStringList: LiveData<List<String>> = Transformations.switchMap(fizzBuzzDataInput) { address ->
+		liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+			emit(calculateFizzBuzz(address))
+		}
+	}
 	
+	val isLoading = MutableLiveData<Boolean>()
 	private var data: FizzBuzzData? = null
 	
 	init {
-		showNextFragment.postValue(false)
+		isLoading.postValue(false)
 	}
 	
 	fun setFizzBuzzData(firstWord: String, secondWord: String, firstMultiple: Long, secondMultiple: Long, limit: Long) {
@@ -28,33 +38,11 @@ class FizzBuzzViewModel @Inject constructor(
 			limit = limit,
 			firstWord = firstWord,
 			secondWord = secondWord
-		)
-	}
-	
-	fun showNextFragment( showNext: Boolean){
-		showNextFragment.postValue(showNext)
-		fizzBuzzString.postValue("")
-	}
-	
-	suspend fun getFizzBuzzText() {
-			data?.let {
-				calculateFizzBuzz(it)
-					.onSuccess { result ->
-						setContentState(result)
-					}
-					.onFailure {
-						setErrorState()
-					}
-			}
-	}
-	
-	private fun setContentState(transactionsResult: String) {
-		fizzBuzzString.postValue(transactionsResult)
-	}
-	
-	
-	private fun setErrorState() {
-		setContentState("Error while charging the text! Please try again.")
+		).apply {
+			fizzBuzzDataInput.value = this
+		}
+		
+		isLoading.postValue(true)
 	}
 	
 	fun getFizzBuzzData(): FizzBuzzData? {
