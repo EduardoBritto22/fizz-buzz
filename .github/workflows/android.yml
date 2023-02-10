@@ -72,6 +72,14 @@ jobs:
     needs: apk
     runs-on: ubuntu-latest
     steps:
+      - name: Retrieve Version
+        run: |
+          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q printVersionName)"
+        id: android_version
+      - name: Get version
+        run: |
+          echo "version_name=${{steps.android_version.outputs.VERSION_NAME}}" >> $GITHUB_ENV
+
       - name: Download APK from build
         uses: actions/download-artifact@v1
         with:
@@ -82,8 +90,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{env.version_name}}
+          release_name: Release ${{env.version_name}}
       - name: Upload Release APK
         id: upload_release_asset
         uses: actions/upload-release-asset@v1.0.1

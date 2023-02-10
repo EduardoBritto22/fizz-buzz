@@ -3,6 +3,8 @@
 buildscript {
     ext {
         hiltVersion = '2.43.2'
+        versionCode = 10
+        versionName =  "1.1"
     }
 
     dependencies {
@@ -19,4 +21,8 @@ plugins {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task printVersionName {
+    println project.ext.versionName
 }
